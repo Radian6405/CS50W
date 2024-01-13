@@ -21,6 +21,19 @@ a:hover{
     text-align: center;
 }
 
+#imgcontainer{
+    text-align: center;
+    position: relative;
+}
+
+#subscript{
+    position: absolute;
+    bottom: 20px;
+    right: 715px;
+    font-size: 18px;
+    color: rgb(83, 123, 243);
+}
+
 img{
     padding-top: 190px;
     padding-bottom: 10px;
@@ -34,10 +47,21 @@ img{
 }
 
 input[type=text]{
-    width: 580px;
+    width: 560px;
     border-radius: 40px;
     height: 40px;
-    border: 1px solid darkgray;
+    border: 1px solid lightgray;
+    
+    font-size: 18px;
+    padding-left: 20px;
+}
+
+input[type=text]:hover, input[type=text]:active {
+    box-shadow: 0 0 5px rgba(211, 211, 211, 1);
+}
+
+input[type=text]:focus{
+    outline: none;
 }
 
 input[type=submit]{
@@ -47,12 +71,9 @@ input[type=submit]{
     margin-right: 5px;
     border: 0px;
 }
+
 input[type=submit]:hover {
     box-shadow: 0 0 1px black;
-}
-
-input[type=text]:hover, input[type=text]:active {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 div{
