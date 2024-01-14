@@ -6,22 +6,22 @@
 
     </head>
     <body>
+        <div id="navbar">
+            <div class="button">
+                <a href="imgsearch.html">Image Search</a>
+            </div>
+            <div class="button">
+                <a href="advsearch.html">Advanced Search</a>
+            </div>
+        </div>
+        
+        <div id="img">
+            <img style= "width: 300px;" src="static/glogo.png" alt="Google">
+        </div>
+        
         <form action="https://www.google.com/search">
-            <div id="navbar">
-                <div class="button">
-                    <a href="imgsearch.html">Image Search</a>
-                </div>
-                <div class="button">
-                    <a href="advsearch.html">Advanced Search</a>
-                </div>
-            </div>
-
-            <div id="img">
-                <img src="static/glogo.png" alt="Google">
-            </div>
-
             <div class="search">
-                <input autocomplete="off" type="text" name="q">
+                <input class="tinput" autocomplete="off" type="text" name="q">
             </div>
             <div class="search">
                 <input type="submit" value="Google Search">

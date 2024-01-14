@@ -19,11 +19,18 @@ a:hover{
 
 #img{
     text-align: center;
+    padding-top: 190px;
+    padding-bottom: 10px;
+    position: relative;
 }
 
-#imgcontainer{
-    text-align: center;
-    position: relative;
+
+#navimg{
+    display: inline-block;
+    text-align: left;
+    position: absolute;
+    top: 20px;
+    left: 18px;
 }
 
 #subscript{
@@ -34,11 +41,6 @@ a:hover{
     color: rgb(83, 123, 243);
 }
 
-img{
-    padding-top: 190px;
-    padding-bottom: 10px;
-    width: 300px;
-}
 
 .search{
     text-align: center;
@@ -46,7 +48,7 @@ img{
     padding-bottom: 15px;
 }
 
-input[type=text]{
+.tinput{
     width: 560px;
     border-radius: 40px;
     height: 40px;
@@ -56,11 +58,11 @@ input[type=text]{
     padding-left: 20px;
 }
 
-input[type=text]:hover, input[type=text]:active {
+.tinput:hover, .tinput:active {
     box-shadow: 0 0 5px rgba(211, 211, 211, 1);
 }
 
-input[type=text]:focus{
+.tinput:focus{
     outline: none;
 }
 
@@ -74,6 +76,70 @@ input[type=submit]{
 
 input[type=submit]:hover {
     box-shadow: 0 0 1px black;
+}
+
+#heading{
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    color: rgb(213, 53, 40);
+    padding-top: 23px;
+    padding-left: 38px;
+    padding-bottom: 24px;
+
+    border-bottom: 1px solid rgb(235, 235, 235);
+}
+
+#smallhead{
+    font-size: 16px; 
+    font-family: Arial, sans-serif;
+    padding-bottom: 10px;
+}
+
+#main{
+    padding-left: 36px;
+    padding-top: 48px;
+    
+}
+
+.list{
+    border-bottom: 1px solid rgb(235, 235, 235);
+    padding-bottom: 22px;
+}
+
+.listel{
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.label{
+    font-size: 13px; 
+    font-family: Arial, sans-serif;
+    
+    display: inline-block;
+    width: 180px;
+}
+
+#slabel{
+    font-size: 13px; 
+    font-family: Arial, sans-serif;
+    
+    text-align: center;
+    display: inline-block;
+    width: 40px;
+}
+
+.listel > input{
+    height: 23px;
+    border-radius: 5;
+    border: 1px solid rgb(205,205,205);
+}
+
+.binput{
+    width: 563px;
+}
+
+.sinput{
+    width: 255px;
 }
 
 div{
