@@ -134,14 +134,19 @@ input[type=submit]:hover {
     border: 1px solid rgb(205,205,205);
     padding-left: 7px;
     padding-right: 7px;
-}
-
-.binput{
     width: 549px;
 }
 
-.sinput{
-    width: 243px;
+.listel > input:focus{
+    outline: none;
+    border: 1px solid rgb(92, 140, 253);
+    box-shadow: inset 1px 1px 1px 0 lightgray;
+}
+
+#bcontainer{
+    text-align: left;
+    padding: 20px;
+    padding-left: 320px;
 }
 
 div{
