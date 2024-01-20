@@ -31,7 +31,7 @@ def search(request):
         #to redirect to proper wiki page
         if entry != None:
             html = markdown2.markdown(entry)
-            return render(request, f"encyclopedia/wikipage.html", {
+            return render(request, "encyclopedia/wikipage.html", {
                 "html": html,
                 "title": data.upper()
             })
@@ -50,4 +50,24 @@ def search(request):
 
     #if request is get
     return render(request, "encyclopedia/notfound.html")
-        
+
+def add(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        body = request.POST.get("body")
+
+        if title in util.list_entries():
+            return render(request, "encyclopedia/addpage.html", {
+                "message": "Page Already Exists",
+                "body": body
+            }) 
+
+        with open(f"entries/{title}.md", 'w') as f:
+            f.write(body)
+
+        return wiki(request, title)
+
+    return render(request, "encyclopedia/addpage.html", {
+        "message": "",
+        "body": ""
+    })
