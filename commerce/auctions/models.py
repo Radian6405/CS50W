@@ -21,7 +21,7 @@ class Bids(models.Model):
         return f"${self.amount} for {self.listing} by {self.bidder}"
 
 class Comments(models.Model):
-    text = models.CharField(max_length="300")
+    text = models.CharField(max_length=300)
     commenter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="Comments")
     listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="Comments")
 
