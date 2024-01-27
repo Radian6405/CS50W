@@ -11,7 +11,7 @@ class AuctionListing(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="Listings")
     startBid = models.IntegerField()
     image = models.CharField(max_length=2048 ,null = True)
-
+    isClosed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"(*{self.name}* by  {self.seller})"
@@ -31,3 +31,10 @@ class Comments(models.Model):
 
     def __str__(self):
         return f"{self.commenter}'s comment for {self.Listings}: \n{self.text}"
+
+class Watchlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="Watchlist")
+    listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="Watchlist")
+
+    def __str__(self):
+        return f"{self.user}: {self.listing.name}"

@@ -9,9 +9,12 @@ from .models import *
 
 
 def index(request):
-    listings = AuctionListing.objects.all()
+    #displays open and closed listings as cards
+    openlistings = AuctionListing.objects.filter(isClosed=False)
+    closedlistings = AuctionListing.objects.filter(isClosed=True)
     return render(request, "auctions/index.html", {
-        "listings": listings
+        "openlistings": openlistings,
+        "closedlistings": closedlistings
     })
 
 
@@ -69,6 +72,7 @@ def register(request):
 @login_required(login_url='login')
 def create_listing(request):
     if request.method == "POST":
+        #form to create a listing
         listing = AuctionListing(
             name = request.POST["title"],
             description = request.POST["description"],
@@ -81,3 +85,77 @@ def create_listing(request):
         return HttpResponseRedirect(reverse("index"))
 
     return render(request, "auctions/createlisting.html")
+
+#@login_required(login_url='login')
+def listing(request, id):
+    if request.method == "POST":
+        #updating database
+        listing = AuctionListing.objects.get(pk=id)
+        listing.isClosed=True
+        listing.save()
+
+        return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
+    
+    listing = AuctionListing.objects.get(pk=id)
+    comments = Comments.objects.filter(listing=listing)
+
+    #displaying closed listings
+    if listing.isClosed:
+      return render(request, "auctions/listingpage.html", {
+        "listing": listing,
+        "comments": comments
+    })
+
+    #displaying open listings
+    watchidlist = Watchlist.objects.filter(listing=listing).values_list("user")
+    watchlist = []
+    for i in watchidlist:
+        watchlist.append(User.objects.get(pk=i[0]))        
+    inWatchlist = request.user in watchlist
+
+    return render(request, "auctions/listingpage.html", {
+        "listing": listing,
+        "inWatchlist": inWatchlist,
+        "comments": comments
+    })
+    
+@login_required(login_url='login')
+def watchlist(request):
+    if request.method == "POST":
+        listing = AuctionListing.objects.get(pk=request.POST.get("listing"))
+        watchidlist = Watchlist.objects.filter(listing=listing).values_list("user")
+        watchlist = []
+        for i in watchidlist:
+            watchlist.append(User.objects.get(pk=i[0]))
+
+        #adding/deleteing listing form user's watchlist
+        if request.user in watchlist:
+            Watchlist.objects.filter(user=request.user, listing=listing).delete()
+        else:
+            w = Watchlist(user=request.user, listing=listing)
+            w.save()
+        
+        return HttpResponseRedirect(reverse("watchlist"))
+    
+    #displaying user's watchlist elements
+    idlist = Watchlist.objects.filter(user=request.user).values_list("listing", flat=True)
+    itemlist = []
+    for i in idlist:
+        itemlist.append(AuctionListing.objects.get(pk=i))
+
+    return render(request, "auctions/watchlist.html", {
+        "watchlist": itemlist
+    })
+
+@login_required(login_url='login')
+def comment(request):
+    if request.method == "POST":
+        listing = AuctionListing.objects.get(pk=request.POST.get("userID"))
+        comment = Comments(
+            text=request.POST.get("text"),
+            commenter=request.user,
+            listing=listing
+            )
+        comment.save()
+        return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
+    return render(request, "auctions/pagenotfound.html")

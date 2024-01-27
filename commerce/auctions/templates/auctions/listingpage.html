@@ -1,0 +1,76 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <img class="card-img-top" src="{{listing.image}}" alt="No Image Availabe">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card" style="padding: 20px;">
+                    <h1 class="card-title">{{listing.name}}</h1>
+                    <p class="card-text">{{listing.description}}</p>
+                    <p></p>
+                    <h3>${{listing.startBid}} </h3>
+                    <p>Current Bid: $__ </p>
+                    
+                    {% if not listing.isClosed %}
+                        {% if user.username != listing.seller.username %}
+                            <form method="POST" action="{% url 'index'}">
+                                {% csrf_token %}
+                                <div class="input-group" style="width: 50%;">
+                                    <span class="input-group-text">$</span>
+                                    <input type="text" class="form-control">
+                                    <button class="btn btn-outline-secondary" type="Submit">Bid</button>
+                                </div>
+                                
+                            </form>
+                            <p></p>
+                            <form action="{% url 'watchlist' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="listing" value="{{listing.id}}">
+                                <button class="btn btn-primary" type="submit" style="width: 25%;">
+                                    {% if inWatchlist %}
+                                        Remove from watchlist
+                                    {% else %}
+                                        Add to watchlist
+                                    {% endif %}
+                                        </button>
+                                    </form>    
+                        {% else %}
+                            <form method="POST" action="{% url 'listing' listing.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-primary" type="submit">Close</button>
+                            </form>
+                        {% endif %}   
+                    {% else %}
+                        <div class="alert alert-danger" role="alert">Closed</div>
+                    {% endif %}
+                </div>    
+                            
+                        
+                <div class="card" style="padding: 20px;">
+                    <h2>Comments</h2>
+                    <form action="{% url 'comment' %}" method="post" >
+                        {% csrf_token %}
+                        <textarea class="form-control" name="text" placeholder="Enter comment here" required></textarea>
+                        <div style="margin: 10px;">
+                            <button class="btn btn-primary" type="submit">Comment</button>
+                        </div>
+                        <input type="hidden" name="userID" value={{listing.id}}>
+                    </form>
+                    <div style="list-style-type: none; border-top: 1px solid lightgray ; padding-top: 10px; padding-left: 20px;">
+                        {% for comment in comments %}
+                            <div style="text-align: left;">
+                                <h6 >{{comment.commenter.username}}</h6>
+                                <p>{{comment.text}}</p>
+                            </div>
+                        {% endfor %}
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
