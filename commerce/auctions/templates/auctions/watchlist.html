@@ -3,11 +3,14 @@
 {% block body %}
 
     <h1>Watchlist</h1>
-    <ul>
+    <ul class="list-group">
         {% for listing in watchlist %}
-        <li>
-            <h3>{{listing.name}}</h3>
-            <p>by {{listing.seller}}</p>
+        <li class="list-group-item">
+            <div style="font-size: 24px; font-weight: normal;">
+                <a href="{% url 'listing' listing.id %}">{{listing.name}}</a>
+            </div>
+            <div style="font-size: 16px;">by {{listing.seller}}</div>
+            <h5 style="padding-top: 20px;">${{listing.startBid}}</h5>
         </li>
         {% endfor %}
     </ul>

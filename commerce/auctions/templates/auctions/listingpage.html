@@ -14,20 +14,25 @@
                     <p class="card-text">{{listing.description}}</p>
                     <p></p>
                     <h3>${{listing.startBid}} </h3>
-                    <p>Current Bid: $__ </p>
+                    <h5>Current Bid: {{maxbid}}</h5>
                     
                     {% if not listing.isClosed %}
                         {% if user.username != listing.seller.username %}
-                            <form method="POST" action="{% url 'index'}">
+                            <form method="POST" action="{% url 'bid' %}">
                                 {% csrf_token %}
                                 <div class="input-group" style="width: 50%;">
                                     <span class="input-group-text">$</span>
-                                    <input type="text" class="form-control">
+                                    <input type="number" name="amount" class="form-control">
                                     <button class="btn btn-outline-secondary" type="Submit">Bid</button>
+                                    <input type="hidden" name="userID" value={{listing.id}}>
                                 </div>
-                                
                             </form>
+
+                            {% if message %}
+                                <div class="alert alert-danger" role="alert">{{message}}</div>
+                            {% endif %}
                             <p></p>
+
                             <form action="{% url 'watchlist' %}" method="POST">
                                 {% csrf_token %}
                                 <input type="hidden" name="listing" value="{{listing.id}}">
@@ -46,8 +51,17 @@
                             </form>
                         {% endif %}   
                     {% else %}
-                        <div class="alert alert-danger" role="alert">Closed</div>
+                        {% if listing.winner %}
+                            {% if listing.winner == user %}
+                                <div class="alert alert-success" role="alert">You are the winner!</div>
+                            {% else %}
+                                <div class="alert alert-success" role="alert">{{listing.winner.username}} is the winner!</div>
+                            {% endif %}
+                        {% else %}
+                            <div class="alert alert-warning" role="alert">No Winner</div>
+                        {% endif %}
                     {% endif %}
+                    
                 </div>    
                             
                         

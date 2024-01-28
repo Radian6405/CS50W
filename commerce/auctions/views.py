@@ -88,22 +88,41 @@ def create_listing(request):
 
 #@login_required(login_url='login')
 def listing(request, id):
+    #closing a listing
     if request.method == "POST":
-        #updating database
         listing = AuctionListing.objects.get(pk=id)
-        listing.isClosed=True
+        bids = Bids.objects.filter(listing=listing)
+        winBid = listing.startBid
+        for bid in bids:
+            if winBid < bid.amount:
+                winBid = bid.amount
+                winner = bid.bidder
+            
+                
+        if len(bids) == 0:
+            listing.isClosed = True
+        else:
+            listing.isClosed = True
+            listing.winner = winner
+
         listing.save()
 
         return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
     
     listing = AuctionListing.objects.get(pk=id)
     comments = Comments.objects.filter(listing=listing)
+    bids = Bids.objects.filter(listing=listing).values_list("amount", flat=True)
+    if len(bids) != 0:
+        max_bid = max(bids)
+    else:
+        max_bid = 0
 
     #displaying closed listings
     if listing.isClosed:
       return render(request, "auctions/listingpage.html", {
         "listing": listing,
-        "comments": comments
+        "comments": comments,
+        "maxbid": f"${max_bid}" if max_bid > listing.startBid else "None"
     })
 
     #displaying open listings
@@ -116,7 +135,8 @@ def listing(request, id):
     return render(request, "auctions/listingpage.html", {
         "listing": listing,
         "inWatchlist": inWatchlist,
-        "comments": comments
+        "comments": comments,
+        "maxbid": f"${max_bid}" if max_bid > listing.startBid else "None"
     })
     
 @login_required(login_url='login')
@@ -158,4 +178,46 @@ def comment(request):
             )
         comment.save()
         return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
+    return render(request, "auctions/pagenotfound.html")
+
+@login_required(login_url='login')
+def bid(request):
+    if request.method == "POST":
+        listing = AuctionListing.objects.get(pk=request.POST.get("userID"))
+        amount = int(request.POST.get("amount"))
+
+        bids = Bids.objects.filter(listing=listing).values_list("amount", flat=True)
+        if len(bids) != 0:
+            max_bid = max(bids)
+        else:
+            max_bid = 0
+
+        if amount > max_bid and amount > listing.startBid:
+            Bid = Bids(amount=amount, bidder=request.user, listing=listing)
+            Bid.save()
+            return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
+        else:
+            #displaying closed listings
+            if listing.isClosed:
+                return render(request, "auctions/listingpage.html", {
+                    "listing": listing,
+                    "comments": comments
+                })
+
+            #displaying open listings
+            watchidlist = Watchlist.objects.filter(listing=listing).values_list("user")
+            watchlist = []
+            for i in watchidlist:
+                watchlist.append(User.objects.get(pk=i[0]))        
+            inWatchlist = request.user in watchlist
+            comments = Comments.objects.filter(listing=listing)
+
+            return render(request, "auctions/listingpage.html", {
+                "listing": listing,
+                "inWatchlist": inWatchlist,
+                "comments": comments,
+                "message": f"Bid must be higher than {max_bid if max_bid > listing.startBid else listing.startBid}",
+                "maxbid": f"${max_bid}" if max_bid > listing.startBid else "None"
+            })
+
     return render(request, "auctions/pagenotfound.html")
