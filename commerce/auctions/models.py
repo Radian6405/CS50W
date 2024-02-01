@@ -32,7 +32,7 @@ class Comments(models.Model):
     listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="Comments")
 
     def __str__(self):
-        return f"{self.commenter}'s comment for {self.Listings}: \n{self.text}"
+        return f"{self.commenter}'s comment for {self.listing}: \n{self.text}"
 
 class Watchlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="Watchlist")
