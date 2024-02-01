@@ -1,0 +1,53 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block body %}
+
+<h2>{{title}}</h2>
+<p></p>
+
+<h4>Active listings</h4>
+
+<div style="display: flex;">
+    {% for listing in openlistings %}
+    <div class="card" style="width: 18rem; margin: 10px;">
+        <img class="card-img-top" src="{{listing.image}}" alt="No image Available" height="200">
+        <div class="card-body">
+            <h4 class="card-title">{{listing.name}}</h4>
+            <h6 class="card-subtitle">by {{listing.seller}}</h6>
+            <p class="card-text">{{listing.description}}</p>
+            <h5 class="card-text">Start Bid: {{listing.startBid}}$</h5>
+            <a class="btn btn-primary stretched-link" href="{% url 'listing' listing.id %}">
+                {% if user.is_authenticated %}
+                {% if user.username == listing.seller.username %}
+                Edit
+                {% else %}
+                Bid
+                {% endif %}
+                {% else %}
+                View
+                {% endif %}
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<h4>Closed listings</h4>
+
+<div style="display: flex;">
+    {% for listing in closedlistings %}
+    <div class="card" style="width: 18rem; margin: 10px;">
+        <img class="card-img-top" src="{{listing.image}}" alt="No image Available" height="200">
+        <div class="card-body">
+            <h4 class="card-title">{{listing.name}}</h4>
+            <h6 class="card-subtitle">by {{listing.seller}}</h6>
+            <p class="card-text">{{listing.description}}</p>
+            <h5 class="card-text">Start Bid: {{listing.startBid}}$</h5>
+            <a class="btn btn-primary stretched-link" href="{% url 'listing' listing.id %}">View</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

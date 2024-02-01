@@ -1,5 +1,7 @@
 {% extends "auctions/layout.html" %}
 
+{% block title %}Auctions{% endblock %}
+
 {% block body %}
     <h2>Active Listings</h2>
 
@@ -39,17 +41,7 @@
                 <h6 class="card-subtitle">by {{listing.seller}}</h6>
                 <p class="card-text">{{listing.description}}</p>
                 <h5 class="card-text">Start Bid: {{listing.startBid}}$</h5>
-                <a class="btn btn-primary stretched-link" href="{% url 'listing' listing.id %}">
-                    {% if user.is_authenticated %}
-                        {% if user.username == listing.seller.username %}
-                            Edit
-                        {% else %}
-                            Bid
-                        {% endif %}
-                    {% else %}
-                        View
-                    {% endif %}
-                </a>
+                <a class="btn btn-primary stretched-link" href="{% url 'listing' listing.id %}">View</a>
             </div>
         </div>
         {% endfor %}

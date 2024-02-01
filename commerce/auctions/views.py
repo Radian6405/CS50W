@@ -221,3 +221,26 @@ def bid(request):
             })
 
     return render(request, "auctions/pagenotfound.html")
+
+def categories(request):
+    categoryList = list(Categories.objects.all())
+    categories = []
+    for i in range(len(categoryList)):
+        categories.append([str(categoryList[i]), categoryList[i].get_category_display()])
+    return render(request, "auctions/categories.html", {
+        "categorylist": categories
+    })
+
+def categoryPage(request, name):
+    if not (name in Categories.CATEGORIES):
+        return render(request, "auctions/pagenotfound.html")
+
+    category = Categories.objects.filter(category=name).get()
+    openlistings = category.listing.filter(isClosed=False)
+    closedlistings = category.listing.filter(isClosed=True)
+
+    return render(request, "auctions/categorypage.html", {
+        "openlistings": openlistings,
+        "closedlistings": closedlistings,
+        "title": category.get_category_display()
+    })

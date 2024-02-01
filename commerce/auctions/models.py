@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -39,3 +40,26 @@ class Watchlist(models.Model):
 
     def __str__(self):
         return f"{self.user}: {self.listing.name}"
+
+class Categories(models.Model):
+    class CATEGORIES(models.TextChoices):
+        ANTIQUES = "AN", _("Antiques")
+        ART = "AR", _("Art & Decor")
+        BOOKS = "BO", _("Books")
+        GAMES = "CD", _("CD, DVD & Games")
+        CLOTHING = "CL", _("Clothing & Fasion")
+        COLLECTABLES = "CO", _("Collectables")
+        COMPUTERS = "CM", _("Computers")
+        DINING = "DI", _("Dining")
+        ELECTRONICS = "EL", _("Electronics & Gadgets")
+        HANDBAGS = "HA", _("Handbags")
+        LAWN = "LA", _("Lawn & Garden")
+        SPORTS = "SP", _("Sports & Equipment")
+        TOYS = "TO", _("Toys")
+        TRAVEL = "TR", _("Travel Accesaries")
+
+    category = models.CharField(max_length=2, choices=CATEGORIES, null=True)
+    listing = models.ManyToManyField(AuctionListing, blank=True, related_name="Category")
+    
+    def __str__(self):
+        return f"{self.category}"
