@@ -4,10 +4,11 @@
 
 {% block body %}
 <h1>Create New Listing</h1>
+<div style="width: 50%; ">
     <form action="{% url 'create_listing' %}" method="post">
         {% csrf_token %}
         <input class="form-control" type="text" name="title" placeholder="Title" required>
-
+        
         <div style="padding-top: 10px;">
             <textarea class="form-control" rows="4" cols="100" name="description" placeholder="Enter description here" required></textarea>
         </div>
@@ -20,8 +21,19 @@
             <input class="form-control" type="url" name="imgurl" placeholder="Image URL">
         </div>
         
+        <div style="padding-top: 10px;" class="form-floating" >
+            <select class="form-select form-select-lg" style="width:150px;" required  name="category">
+                <option selected>Category</option>
+                {% for item in categorylist %}
+                <option value="{{item.0}}">{{item.1}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
         <div style="padding-top: 10px;">
             <button class="btn btn-primary" type="Submit">Create</button>
         </div>
+        
     </form>
+</div>
 {% endblock %}

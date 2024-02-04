@@ -4,15 +4,21 @@
 
 {% block body %}
 <h1>Categories</h1>
-<ul class="list-group">
-    {% for item in categorylist %}
-    <li class="list-group-item">
-        <h3>
-            <a href="category/{{item.0}}">
-                {{item.1}}
-            </a>
-        </h3>
-    </li>
-    {% endfor %}
-</ul>
+<div class="container-fluid">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-5 "">
+        {% for item in categorylist %}
+        <div class="col">
+            <div class="card" style="margin-top: 20px; height: 300px; overflow: hidden; object-fit: contain;">
+                <div style="height: 200px; overflow: hidden; object-fit: contain;">
+                    <img class="card-img-top" src="static/auctions/{{item.0}}.png" alt="No image Available">
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">{{item.1}}</h4>
+                    <a class="btn btn-primary stretched-link" href="category/{{item.0}}">Check out</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

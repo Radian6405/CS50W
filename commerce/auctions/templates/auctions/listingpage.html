@@ -13,7 +13,13 @@
             <div class="col-6">
                 <div class="card" style="padding: 20px;">
                     <h1 class="card-title">{{listing.name}}</h1>
-                    <p class="card-text">{{listing.description}}</p>
+                    {% for item in categoryList %}
+                    <div style="border: 1px solid gray; width: 100px; text-align: center; border-radius: 15px; height: 30px; background-color: lightgray;">
+                        <a href="/category/{{item.0}}" style="font-size: 12px; color: black;">{{item.1}}</a>
+                    </div>
+                    {% endfor %}
+                    
+                    <p class="card-text" style="font-size: large;">{{listing.description}}</p>
                     <p></p>
                     <h3>${{listing.startBid}} </h3>
                     <h5>Current Bid: {{maxbid}}</h5>

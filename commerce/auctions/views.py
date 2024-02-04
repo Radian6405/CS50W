@@ -81,10 +81,21 @@ def create_listing(request):
             image = request.POST["imgurl"]
         )
         listing.save()
+        listingCategory = Categories.objects.filter(category = request.POST["category"]).first()
+
+        if request.POST["category"] in Categories.CATEGORIES:
+            listing.Category.add(listingCategory)
+            listing.save()
 
         return HttpResponseRedirect(reverse("index"))
-
-    return render(request, "auctions/createlisting.html")
+    
+    categoryList = list(Categories.objects.all())
+    categories = []
+    for i in range(len(categoryList)):
+        categories.append([str(categoryList[i]), categoryList[i].get_category_display()])
+    return render(request, "auctions/createlisting.html", {
+        "categorylist": categories,
+    })
 
 #@login_required(login_url='login')
 def listing(request, id):
@@ -116,13 +127,18 @@ def listing(request, id):
         max_bid = max(bids)
     else:
         max_bid = 0
+    categoryList = list(listing.Category.all())
+    categories = []
+    for i in range(len(categoryList)):
+        categories.append([str(categoryList[i]), categoryList[i].get_category_display()])
 
     #displaying closed listings
     if listing.isClosed:
       return render(request, "auctions/listingpage.html", {
         "listing": listing,
         "comments": comments,
-        "maxbid": f"${max_bid}" if max_bid > listing.startBid else "None"
+        "maxbid": f"${max_bid}" if max_bid > listing.startBid else "None",
+        "categoryList": categories
     })
 
     #displaying open listings
@@ -136,7 +152,8 @@ def listing(request, id):
         "listing": listing,
         "inWatchlist": inWatchlist,
         "comments": comments,
-        "maxbid": f"${max_bid}" if max_bid > listing.startBid else "None"
+        "maxbid": f"${max_bid}" if max_bid > listing.startBid else "None",
+        "categoryList": categories
     })
     
 @login_required(login_url='login')
@@ -239,8 +256,7 @@ def categoryPage(request, name):
     openlistings = category.listing.filter(isClosed=False)
     closedlistings = category.listing.filter(isClosed=True)
 
-    return render(request, "auctions/categorypage.html", {
+    return render(request, "auctions/index.html", {
         "openlistings": openlistings,
         "closedlistings": closedlistings,
-        "title": category.get_category_display()
     })

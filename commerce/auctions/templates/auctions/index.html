@@ -4,46 +4,53 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    <div style="display: flex;">
-        {% for listing in openlistings %}
-        <div class="card" style="width: 18rem; margin: 10px;">
-            <img class="card-img-top" src="{{listing.image}}" alt="No image Available" height="200">
-            <div class="card-body">
-                <h4 class="card-title">{{listing.name}}</h4>
-                <h6 class="card-subtitle">by {{listing.seller}}</h6>
-                <p class="card-text">{{listing.description}}</p>
-                <h5 class="card-text">Start Bid: {{listing.startBid}}$</h5>
-                <a class="btn btn-primary stretched-link" href="{% url 'listing' listing.id %}">
-                    {% if user.is_authenticated %}
-                        {% if user.username == listing.seller.username %}
+    <div class="container-fluid">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-5 "">
+            {% for listing in openlistings %}
+            <div class="col">
+                <div class="card" style="width: 18rem; margin: 10px;">
+                    <img class="card-img-top" src="{{listing.image}}" alt="No image Available" height="200">
+                    <div class="card-body">
+                        <h4 class="card-title">{{listing.name}}</h4>
+                        <h6 class="card-subtitle">by {{listing.seller}}</h6>
+                        <p class="card-text">{{listing.description}}</p>
+                        <h5 class="card-text">Start Bid: {{listing.startBid}}$</h5>
+                        <a class="btn btn-primary stretched-link" href="{% url 'listing' listing.id %}">
+                            {% if user.is_authenticated %}
+                            {% if user.username == listing.seller.username %}
                             Edit
-                        {% else %}
+                            {% else %}
                             Bid
-                        {% endif %}
-                    {% else %}
-                        View
-                    {% endif %}
-                </a>
+                            {% endif %}
+                            {% else %}
+                            View
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 
     <h2>Closed Listings</h2>
 
-    <div style="display: flex;">
-        {% for listing in closedlistings %}
-        <div class="card" style="width: 18rem; margin: 10px;">
-            <img class="card-img-top" src="{{listing.image}}" alt="No image Available" height="200">
-            <div class="card-body">
-                <h4 class="card-title">{{listing.name}}</h4>
-                <h6 class="card-subtitle">by {{listing.seller}}</h6>
-                <p class="card-text">{{listing.description}}</p>
-                <h5 class="card-text">Start Bid: {{listing.startBid}}$</h5>
-                <a class="btn btn-primary stretched-link" href="{% url 'listing' listing.id %}">View</a>
+    <div class="container-fluid">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-5 "">
+            {% for listing in closedlistings %}
+            <div class="col">
+                <div class="card" style="width: 18rem; margin: 10px;">
+                    <img class="card-img-top" src="{{listing.image}}" alt="No image Available" height="200">
+                    <div class="card-body">
+                        <h4 class="card-title">{{listing.name}}</h4>
+                        <h6 class="card-subtitle">by {{listing.seller}}</h6>
+                        <p class="card-text">{{listing.description}}</p>
+                        <h5 class="card-text">Start Bid: {{listing.startBid}}$</h5>
+                        <a class="btn btn-primary stretched-link" href="{% url 'listing' listing.id %}">View</a>
+                    </div>
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 {% endblock %}
