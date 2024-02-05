@@ -5,15 +5,18 @@
 {% block body %}
     <h2>Active Listings</h2>
     <div class="container-fluid">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-5 "">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-4 "">
             {% for listing in openlistings %}
             <div class="col">
-                <div class="card" style="width: 18rem; margin: 10px;">
-                    <img class="card-img-top" src="{{listing.image}}" alt="No image Available" height="200">
+                <div class="card" style="margin-top: 20px; height: 550px; overflow: hidden; object-fit: contain;">
+                    <div style="height: 350px; overflow: hidden; object-fit: scale-down;">
+                        <img style="object-fit: scale-down;" class="card-img-top" src="{{listing.image}}" alt="No image Available">
+                    </div>
                     <div class="card-body">
-                        <h4 class="card-title">{{listing.name}}</h4>
+                        <h4 style="max-width: 100ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" class="card-title">{{listing.name}}</h4>
                         <h6 class="card-subtitle">by {{listing.seller}}</h6>
-                        <p class="card-text">{{listing.description}}</p>
+                        <p style="word-break: normal;
+                        overflow-wrap: anywhere; overflow: hidden; white-space: nowrap;" class="card-text">{{listing.description}}</p>
                         <h5 class="card-text">Start Bid: {{listing.startBid}}$</h5>
                         <a class="btn btn-primary stretched-link" href="{% url 'listing' listing.id %}">
                             {% if user.is_authenticated %}
@@ -39,12 +42,15 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-5 "">
             {% for listing in closedlistings %}
             <div class="col">
-                <div class="card" style="width: 18rem; margin: 10px;">
-                    <img class="card-img-top" src="{{listing.image}}" alt="No image Available" height="200">
+                <div class="card" style="margin-top: 20px; height: 550px; overflow: hidden; object-fit: contain;">
+                    <div style="height: 350px; overflow: hidden; object-fit: scaledown;">
+                        <img class="card-img-top" src="{{listing.image}}" alt="No image Available">
+                    </div>
                     <div class="card-body">
-                        <h4 class="card-title">{{listing.name}}</h4>
+                        <h4 style="max-width: 100ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" class="card-title">{{listing.name}}</h4>
                         <h6 class="card-subtitle">by {{listing.seller}}</h6>
-                        <p class="card-text">{{listing.description}}</p>
+                        <p style="word-break: normal;
+                        overflow-wrap: anywhere; overflow: hidden; white-space: nowrap;" class="card-text">{{listing.description}}</p>
                         <h5 class="card-text">Start Bid: {{listing.startBid}}$</h5>
                         <a class="btn btn-primary stretched-link" href="{% url 'listing' listing.id %}">View</a>
                     </div>
