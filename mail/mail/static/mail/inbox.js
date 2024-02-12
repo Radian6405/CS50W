@@ -10,15 +10,34 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 
   //sending mail
-  document.querySelector('#compose-form').onsubmit = () => send_mail();
+  document.querySelector('#compose-form').onsubmit = send_mail;
 
   //opening mail
   document.addEventListener('click', event => open_mail(event));
+
+  //archive mail
+  document.querySelector('#archiveButton').onclick = archive_mail;
   
 });
 
+function archive_mail() {
+  const archived = (this.innerHTML === 'Archive');
+  console.log(archived)
+  fetch(`/emails/${parseInt(this.value)}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+        archived: archived
+    })
+  })
+
+  location.reload();
+}
+
 function open_mail(event) {
   let element = event.target;
+  if (!element) {
+    return false;
+  }
   if (element.parentElement.className === 'list-group-item') {
     element = element.parentElement;
   }
@@ -46,6 +65,21 @@ function open_mail(event) {
               read: true
           })
         })
+      }
+
+      const archiveButton = document.querySelector('#archiveButton');
+      if (document.querySelector('#userEmail').innerHTML === email.sender) {
+        archiveButton.style.display = 'none';
+      }
+      else {
+        archiveButton.style.display = 'block';
+        archiveButton.value = email.id;
+        if(email.archived) {
+          archiveButton.innerHTML = 'Unarchive';
+        }
+        else {
+          archiveButton.innerHTML = 'Archive';
+        }
       }
     });
   }
